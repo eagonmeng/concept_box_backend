@@ -33,7 +33,11 @@ export const inclusions: Record<string, string> = {
   "/api/LikertSurvey/updateResponse": "allow anyone to update their response",
   
   // UserAuthentication
-  "/api/UserAuthentication/_getUserByUsername": "okay to lookup users by their username"
+  "/api/UserAuthentication/_getUserByUsername": "okay to lookup users by their username",
+  "/api/UserAuthentication/_getUsername": "reverse is maybe true too",
+
+  // FileUploading
+  "/api/FileUploading/_getFilename": "need to grab filenames for previews"
 };
 
 /**
@@ -72,4 +76,5 @@ export const exclusions: Array<string> = [
   "/api/Sharing/shareWithUser",
   "/api/Sharing/revokeAccess",
   "/api/Sharing/_isSharedWith",
+  "/api/Sharing/_getFilesSharedWithUser",
 ];
