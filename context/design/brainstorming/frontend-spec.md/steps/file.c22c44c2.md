@@ -1,0 +1,56 @@
+---
+timestamp: 'Wed Oct 29 2025 07:06:13 GMT-0400 (Eastern Daylight Time)'
+parent: '[[../20251029_070613.77de349e.md]]'
+content_id: c22c44c2ada3d45d84efd07e36430c84a3f2e9d8e60038f39ed1e04b516635d6
+---
+
+# file: src/syncs/sharing.sync.ts
+
+```typescript
+import { actions, Sync } from "@engine";
+import { Requesting, Sessioning, FileUploading, UserAuthentication, Sharing } from "@concepts";
+
+//-- Share a File --//
+export const ShareFileRequest: Sync = ({ request, session, file, shareWithUsername, requester, owner, targetUser }) => ({
+  when: actions([Requesting.request, { path: "/share", session, file, shareWithUsername }, { request }]),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { requester });
+    frames = await frames.query(FileUploading._getOwner, { file }, { owner });
+    // Authorize: Requester must be the owner.
+    frames = frames.filter(($) => $[requester] === $[owner]);
+    frames = await frames.query(UserAuthentication._getUserByUsername, { username: shareWithUsername }, { targetUser });
+    return frames;
+  },
+  then: actions([Sharing.shareWithUser, { file, user: targetUser }]),
+});
+
+export const ShareFileResponse: Sync = ({ request }) => ({
+  when: actions(
+    [Requesting.request, { path: "/share" }, { request }],
+    [Sharing.shareWithUser, {}, {}],
+  ),
+  then: actions([Requesting.respond, { request, status: "shared" }]),
+});
+
+//-- Revoke Access to a File --//
+export const RevokeAccessRequest: Sync = ({ request, session, file, revokeForUsername, requester, owner, targetUser }) => ({
+  when: actions([Requesting.request, { path: "/revoke", session, file, revokeForUsername }, { request }]),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { requester });
+    frames = await frames.query(FileUploading._getOwner, { file }, { owner });
+    // Authorize: Requester must be the owner.
+    frames = frames.filter(($) => $[requester] === $[owner]);
+    frames = await frames.query(UserAuthentication._getUserByUsername, { username: revokeForUsername }, { targetUser });
+    return frames;
+  },
+  then: actions([Sharing.revokeAccess, { file, user: targetUser }]),
+});
+
+export const RevokeAccessResponse: Sync = ({ request }) => ({
+  when: actions(
+    [Requesting.request, { path: "/revoke" }, { request }],
+    [Sharing.revokeAccess, {}, {}],
+  ),
+  then: actions([Requesting.respond, { request, status: "revoked" }]),
+});
+```

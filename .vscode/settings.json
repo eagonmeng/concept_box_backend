@@ -1,7 +1,18 @@
 {
+	"files.exclude": {
+    ".ctx": true,
+		".obsidian": true,
+    ".vscode": true,
+    ".gitignore": false,
+		".env": false,
+		".env.template": true,
+		"ctx": true,
+		"deno.lock": true,
+		"media":true
+  },
 	"deno.enable": true,
 	"deno.lint": true,
-	"editor.formatOnSave": true,
+	"editor.formatOnSave": false,
 	"[typescript]": {
 		"editor.defaultFormatter": "denoland.vscode-deno"
 	},
