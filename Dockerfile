@@ -7,16 +7,16 @@ USER deno
 WORKDIR /app
 
 # Expose the port the application will listen on.
-# The default is 8000 according to the Requesting concept's configuration.
-EXPOSE 8000
+# The Requesting concept defaults to PORT 10000.
+EXPOSE 10000
 
 # Copy all application files into the working directory.
-# This includes the 'src', 'deno.json', and any other necessary files.
-COPY . .
+# CRITICAL FIX: Use --chown to ensure the 'deno' user owns the files.
+# This grants the necessary write permissions for the build step.
+COPY --chown=deno:deno . .
 
 # Run the custom build step defined in deno.json.
-# This is a critical step that generates necessary import files (e.g., @concepts).
-# The 'deno task' command will use the permissions defined in deno.json.
+# This step writes to src/concepts/concepts.ts and now has permission to do so.
 RUN deno task build
 
 # Cache the main module and all its dependencies.
