@@ -8,7 +8,9 @@
 		".env.template": true,
 		"ctx": true,
 		"deno.lock": true,
-		"media":true
+		"media":true,
+		"cors.json": true,
+		"geminiConfig.json": true
   },
 	"deno.enable": true,
 	"deno.lint": true,
