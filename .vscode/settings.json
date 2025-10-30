@@ -5,7 +5,7 @@
     ".vscode": true,
     ".gitignore": false,
 		".env": false,
-		".env.template": true,
+		".env.template": false,
 		"ctx": true,
 		"deno.lock": true,
 		"media":true,
