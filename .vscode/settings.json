@@ -9,8 +9,9 @@
 		"ctx": true,
 		"deno.lock": true,
 		"media":true,
-		"cors.json": true,
-		"geminiConfig.json": true
+		"cors.json": false,
+		"geminiConfig.json": false,
+		"Dockerfile": false
   },
 	"deno.enable": true,
 	"deno.lint": true,
